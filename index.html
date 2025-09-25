@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Weather & Country Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-globe-americas"></i>
+                    <h1>Global Dashboard</h1>
+                </div>
+                <p class="subtitle">Discover weather and country insights worldwide</p>
+            </div>
+            <div class="header-decoration"></div>
+        </header>
+
+
+        <section class="search-section">
+            <div class="search-container">
+                <h2>Explore Any City</h2>
+                <form id="searchForm" class="search-form">
+                    <div class="input-group">
+                        <i class="fas fa-search"></i>
+                        <input 
+                            type="text" 
+                            id="cityInput" 
+                            placeholder="Enter city name (e.g., London, Tokyo, New York)"
+                            required
+                        >
+                        <button type="submit" id="searchBtn">
+                            <span class="btn-text">Search</span>
+                            <span class="btn-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+        <section id="resultsSection" class="results-section hidden">
+            <div class="results-container">
+
+                <div class="card weather-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-cloud-sun"></i> Weather Information</h3>
+                        <span class="card-badge weather-badge">Live</span>
+                    </div>
+                    <div class="card-content" id="weatherContent">
+
+                    </div>
+                </div>
+
+
+                <div class="card country-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-flag"></i> Country Details</h3>
+                        <span class="card-badge country-badge">Info</span>
+                    </div>
+                    <div class="card-content" id="countryContent">
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="submit-section">
+                <div class="submit-container">
+                    <h3>Save This Data</h3>
+                    <p>Store this weather and country information to your dashboard</p>
+                    <button id="submitBtn" class="submit-btn">
+                        <i class="fas fa-save"></i>
+                        <span class="btn-text">Save to Dashboard</span>
+                        <span class="btn-loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <div id="statusMessages" class="status-container"></div>
+    </div>
+
+
+    <footer class="footer">
+        <p>&copy; 2025 Global Weather Dashboard. Powered by OpenWeatherMap & RestCountries APIs.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
