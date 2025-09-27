@@ -1,8 +1,8 @@
 
 const API_CONFIG = {
-    WEATHER_API_KEY: //'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}',
-    WEATHER_BASE_URL: //'https://openweathermap.org/api',
-    COUNTRIES_BASE_URL: //'https://restcountries.com/',
+    WEATHER_API_KEY: '260bd9e4c2ce5936ee9ae90e1446df53',
+    WEATHER_BASE_URL: 'https://api.openweathermap.org/data/2.5/weather',
+    COUNTRIES_BASE_URL: 'https://restcountries.com/v3.1/name/deutschland',
     
     BACKEND_URL: //'http://localhost:3000/api'
 };
