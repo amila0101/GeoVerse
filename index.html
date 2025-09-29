@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Weather & Country Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+
+        <header class="header">
+            <div class="header-content">
+                <div class="header-top">
+                    <div class="logo">
+                        <i class="fas fa-globe-americas"></i>
+                        <h1>Global Dashboard</h1>
+                    </div>
+                    
+                    <!-- User Authentication Section -->
+                    <div class="auth-section">
+                        <button id="loginBtn" class="auth-btn login-btn">
+                            <i class="fab fa-google"></i>
+                            <span>Sign In</span>
+                        </button>
+                        <div id="userProfile" class="user-profile hidden">
+                            <img id="userAvatar" src="" alt="User Avatar" class="user-avatar">
+                            <span id="userName" class="user-name"></span>
+                            <button id="logoutBtn" class="auth-btn logout-btn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="subtitle">Discover weather and country insights worldwide</p>
+            </div>
+            <div class="header-decoration"></div>
+        </header>
+
+
+        <section class="search-section">
+            <div class="search-container">
+                <h2>Explore Any City</h2>
+                <form id="searchForm" class="search-form">
+                    <div class="input-group">
+                        <i class="fas fa-search"></i>
+                        <input 
+                            type="text" 
+                            id="cityInput" 
+                            placeholder="Enter city name (e.g., London, Tokyo)"
+                            required
+                        >
+                        <button type="submit" id="searchBtn">
+                            <span class="btn-text">Search</span>
+                            <span class="btn-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Search History -->
+                <div id="searchHistory" class="search-history hidden">
+                    <h4>Recent Searches</h4>
+                    <div id="historyList" class="history-list"></div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button id="favoritesBtn" class="quick-btn">
+                        <i class="fas fa-heart"></i>
+                        <span>Favorites</span>
+                    </button>
+                    <button id="dashboardBtn" class="quick-btn">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>My Dashboard</span>
+                    </button>
+                    <button id="analyticsBtn" class="quick-btn">
+                        <i class="fas fa-analytics"></i>
+                        <span>Analytics</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="resultsSection" class="results-section hidden">
+            <div class="results-container">
+
+                <div class="card weather-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-cloud-sun"></i> Weather Information</h3>
+                        <span class="card-badge weather-badge">Live</span>
+                    </div>
+                    <div class="card-content" id="weatherContent">
+
+                    </div>
+                </div>
+
+
+                <div class="card country-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-flag"></i> Country Details</h3>
+                        <span class="card-badge country-badge">Info</span>
+                    </div>
+                    <div class="card-content" id="countryContent">
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="submit-section">
+                <div class="submit-container">
+                    <h3>Save This Data</h3>
+                    <p>Store this weather and country information to your dashboard</p>
+                    <div class="action-buttons">
+                        <button id="submitBtn" class="submit-btn">
+                            <i class="fas fa-save"></i>
+                            <span class="btn-text">Save to Dashboard</span>
+                            <span class="btn-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                        </button>
+                        <button id="favoriteBtn" class="favorite-btn">
+                            <i class="fas fa-heart"></i>
+                            <span class="btn-text">Add to Favorites</span>
+                        </button>
+                        <button id="shareBtn" class="share-btn">
+                            <i class="fas fa-share"></i>
+                            <span class="btn-text">Share</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Dashboard View -->
+        <section id="dashboardSection" class="dashboard-section hidden">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <button class="back-btn" onclick="showSection('search')">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <h2>My Dashboard</h2>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3 id="totalSearches">0</h3>
+                        <p>Total Searches</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-heart"></i>
+                        <h3 id="totalFavorites">0</h3>
+                        <p>Favorites</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-globe"></i>
+                        <h3 id="countriesVisited">0</h3>
+                        <p>Countries</p>
+                    </div>
+                </div>
+                <div class="dashboard-content">
+                    <div class="recent-searches-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <i class="fas fa-history"></i>
+                                <h3>Recent Searches</h3>
+                            </div>
+                            <button class="clear-history-btn" onclick="clearSearchHistory()" title="Clear all searches">
+                                <i class="fas fa-trash-alt"></i>
+                                <span>Clear All</span>
+                            </button>
+                        </div>
+                        <div id="recentSearchesList" class="recent-searches-list">
+                            <div class="empty-state">
+                                <i class="fas fa-search"></i>
+                                <h4>No Recent Searches</h4>
+                                <p>Your search history will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="savedRecords" class="saved-records">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <i class="fas fa-database"></i>
+                                <h3>Saved Records</h3>
+                            </div>
+                        </div>
+                        <!-- Saved records will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics View -->
+        <section id="analyticsSection" class="analytics-section hidden">
+            <div class="analytics-container">
+                <div class="analytics-header">
+                    <button class="back-btn" onclick="showSection('search')">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <h2>Analytics & Insights</h2>
+                </div>
+                
+                <div class="analytics-stats">
+                    <div class="analytics-stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-thermometer-half"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="avgTemperature">--°C</h3>
+                            <p>Average Temperature</p>
+                        </div>
+                    </div>
+                    <div class="analytics-stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalCities">0</h3>
+                            <p>Cities Searched</p>
+                        </div>
+                    </div>
+                    <div class="analytics-stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalCountries">0</h3>
+                            <p>Countries Visited</p>
+                        </div>
+                    </div>
+                    <div class="analytics-stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalSearches">0</h3>
+                            <p>Total Searches</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">
+                                <i class="fas fa-thermometer-half"></i>
+                                <h3>Temperature Distribution</h3>
+                            </div>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-period="week">Week</button>
+                                <button class="chart-btn" data-period="month">Month</button>
+                                <button class="chart-btn" data-period="year">Year</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="tempChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">
+                                <i class="fas fa-city"></i>
+                                <h3>Top Cities</h3>
+                            </div>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-type="searches">Searches</button>
+                                <button class="chart-btn" data-type="favorites">Favorites</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="citiesChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">
+                                <i class="fas fa-chart-bar"></i>
+                                <h3>Activity Trends</h3>
+                            </div>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-metric="daily">Daily</button>
+                                <button class="chart-btn" data-metric="weekly">Weekly</button>
+                                <button class="chart-btn" data-metric="monthly">Monthly</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">
+                                <i class="fas fa-cloud-sun"></i>
+                                <h3>Weather Patterns</h3>
+                            </div>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-weather="temperature">Temperature</button>
+                                <button class="chart-btn" data-weather="humidity">Humidity</button>
+                                <button class="chart-btn" data-weather="pressure">Pressure</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="weatherChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="insights-section">
+                    <div class="insights-header">
+                        <div class="insights-title">
+                            <i class="fas fa-lightbulb"></i>
+                            <h3>Key Insights</h3>
+                        </div>
+                    </div>
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h4>Hottest Search</h4>
+                                <p id="hottestSearch">No data available</p>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-snowflake"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h4>Coldest Search</h4>
+                                <p id="coldestSearch">No data available</p>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h4>Most Favorited</h4>
+                                <p id="mostFavorited">No data available</p>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="insight-content">
+                                <h4>Peak Activity</h4>
+                                <p id="peakActivity">No data available</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Favorites View -->
+        <section id="favoritesSection" class="favorites-section hidden">
+            <div class="favorites-container">
+                <div class="favorites-header">
+                    <button class="back-btn" onclick="showSection('search')">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <h2>My Favorites</h2>
+                </div>
+                <div id="favoritesList" class="favorites-list">
+                    <!-- Favorites will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <div id="statusMessages" class="status-container"></div>
+    </div>
+
+
+    <footer class="footer">
+        <p>&copy; 2025 Global Weather Dashboard. Powered by OpenWeatherMap & RestCountries APIs.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
